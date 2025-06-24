@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Formula Calculator</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 min-h-screen px-4 py-10">
+  <div class="max-w-7xl mx-auto">
+    <h1 class="text-3xl font-bold text-center text-gray-800 mb-10">📐 Formula Calculator</h1>
+
+    {% if formulas %}
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        {% for var in formulas %}
+          <div class="bg-white shadow-md rounded-xl p-6 hover:shadow-lg transition">
+            <h2 class="text-xl font-semibold text-gray-800">{{ var.name }}</h2>
+            <p class="text-sm text-gray-600 mt-2">🧮 <strong>Expression:</strong> {{ var.expression }}</p>
+            <a href="{% url 'solve_formula' var.id %}" class="mt-4 inline-block text-indigo-600 hover:text-indigo-800 font-medium">
+              ➕ Solve Formula →
+            </a>
+          </div>
+        {% endfor %}
+      </div>
+    {% else %}
+      <p class="text-center text-gray-500 mt-10">No formulas found.</p>
+    {% endif %}
+
+    <div class="mt-12 text-center">
+      <a href="{% url 'home' %}" class="text-indigo-600 hover:underline font-medium text-lg">⬅ Go to Formula Page</a>
+    </div>
+  </div>
+</body>
+</html>

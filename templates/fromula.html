@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>{{ formula.name }} | Solve Formula</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 min-h-screen flex flex-col items-center justify-center py-10 px-4">
+
+  <!-- Title -->
+  <h1 class="text-4xl font-bold text-gray-800 mb-8 text-center">
+    🧠 Solve Formula: <span class="text-indigo-600">{{ formula.name }}</span>
+  </h1>
+
+  <!-- Formula Card -->
+  <div class="bg-white shadow-lg rounded-2xl p-8 w-full max-w-xl">
+
+    <!-- Expression -->
+    <p class="text-gray-600 mb-6 text-center text-lg">
+      🧮 <strong>Expression:</strong> <code class="text-indigo-700">{{ formula.expression }}</code>
+    </p>
+
+    <!-- Input Form -->
+    <form onsubmit="event.preventDefault(); calculate();" class="space-y-4">
+      {% csrf_token %}
+      {% for var in var_name %}
+        <div>
+          <label for="{{ var }}" class="block text-sm font-medium text-gray-700">{{ var }}</label>
+          <input 
+            type="number"
+            id="{{ var }}"
+            name="{{ var }}"
+            step="any"
+            required
+            class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-400"
+          >
+        </div>
+      {% endfor %}
+
+      <button type="submit" class="w-full bg-indigo-600 text-white py-2 rounded-lg font-semibold hover:bg-indigo-700 transition">
+        🧮 Calculate
+      </button>
+    </form>
+
+    <!-- Result Display -->
+    <div id="result" class="mt-6 text-center text-lg font-semibold"></div>
+  </div>
+
+  <!-- Back Link -->
+  <div class="mt-8">
+    <a href="{% url 'home' %}" class="inline-block text-indigo-600 hover:text-indigo-800 font-medium text-md">
+      ⬅ Go Back to Formula List
+    </a>
+  </div>
+
+  <!-- Script -->
+  <script>
+    const expression = `{{ formula.expression }}`;
+    const variables = {{ var_name|safe }};
+
+    // Convert ^ to Math.pow()
+    function convertPowerSyntax(expr) {
+      return expr.replace(/(\([^()]*\)|\w+)\s*\^\s*(\([^()]*\)|\w+)/g, 'Math.pow($1,$2)');
+    }
+
+    function calculate() {
+      let evaluated = expression;
+
+      // Replace each variable with its entered value
+      variables.forEach(function (v) {
+        const value = document.getElementById(v).value;
+        const regex = new RegExp('\\b' + v + '\\b', 'g');
+        evaluated = evaluated.replace(regex, `(${value})`);
+      });
+
+      try {
+        evaluated = convertPowerSyntax(evaluated); // support ^ for power
+        const result = eval(evaluated);
+        document.getElementById("result").innerHTML = `<span class="text-green-600">✅ Result: ${result}</span>`;
+      } catch (err) {
+        document.getElementById("result").innerHTML = `<span class="text-red-600">❌ Error: ${err.message}</span>`;
+      }
+    }
+  </script>
+</body>
+</html>
