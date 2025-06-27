@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Add New Formula</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 min-h-screen flex items-center justify-center">
+
+    <div class="bg-white p-8 rounded-2xl shadow-lg w-full max-w-md">
+        <h2 class="text-2xl font-bold mb-6 text-gray-800">Add New Formula</h2>
+
+        <form method="post" class="space-y-4">
+            {% csrf_token %}
+
+            <!-- Formula Name -->
+            <div>
+                <label class="block text-gray-700 mb-1">Formula Name</label>
+                <input type="text" name="name" required
+                       class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-400">
+            </div>
+
+            <!-- Formula Expression -->
+            <div>
+                <label class="block text-gray-700 mb-1">Expression</label>
+                <textarea name="expression" rows="3" required
+                          class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-400"
+                          placeholder="Example: x1 + x2"></textarea>
+            </div>
+
+            <!-- Variables -->
+            <div>
+                <label class="block text-gray-700 mb-1">No of Variables </label>
+                <input type="text" name="variables" placeholder="e.g., a,b,c,d,e = 5 variables"
+                       class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-400">
+            </div>
+
+            <!-- Submit Button -->
+            <div>
+                <button type="submit"
+                        class="w-full bg-green-500 hover:bg-green-600 text-white font-semibold py-2 px-4 rounded-lg transition duration-200">
+                    Save Formula
+                </button>
+            </div>
+        </form>
+    </div>
+
+</body>
+</html>

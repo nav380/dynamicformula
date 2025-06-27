@@ -1,8 +1,10 @@
-from django.shortcuts import render
+from django.shortcuts import render,redirect
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 import json
 from app.models import Formula
+from django.views.decorators.csrf import csrf_exempt
+
 
 
 def home(request):
@@ -26,6 +28,26 @@ def solve_formula_view(request, pk):
         "var_name": var_name,
         "count": count,
     })
+
+
+@csrf_exempt
+def add_formula(request):
+    if request.method == 'POST':
+        name = request.POST.get('name')
+        expression = request.POST.get('expression')
+        variables = request.POST.get('variables')
+        print(f"Received data: name={name}, expression={expression}, variables={variables}")
+        
+        formula = Formula.objects.create(
+            name=name,
+            expression=expression,
+            variables=variables
+        )
+        print(f"Formula created: {formula}")
+        
+        return redirect('home')
+    
+    return render(request, 'addformula.html')
 
     
 

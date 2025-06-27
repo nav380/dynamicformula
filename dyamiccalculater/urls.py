@@ -22,4 +22,6 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', views.home, name='home'),
     path("<int:pk>/", views.solve_formula_view, name="solve_formula"),
+    path('add_formula/', views.add_formula, name='add_formula'),
+    
 ]
